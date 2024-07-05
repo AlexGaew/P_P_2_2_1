@@ -1,18 +1,26 @@
 package hiber.model;
 
-import javax.persistence.*;
-import java.io.Serializable;
+
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "cars")
-public class Car implements Serializable {
+public class Car {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-
+    private Long id;
 
     @Column(name = "models")
     private String models;
@@ -20,53 +28,45 @@ public class Car implements Serializable {
     @Column(name = "series")
     private int series;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public Car() {}
 
-    public Car(User user, String models, int series) {
-        this.user = user;
+    public Car(User user, String models, int series ) {
         this.models = models;
         this.series = series;
-    }
-
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
         this.user = user;
     }
+
+    public Car() {
+
+    }
+
 
     public String getModels() {
         return models;
     }
 
-    public void setModels(String models) {
-        this.models = models;
-    }
 
     public int getSeries() {
         return series;
     }
 
-    public void setSeries(int series) {
-        this.series = series;
-    }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override
     public String toString() {
-        return "user=" + user +", models='" + models +", series=" + series;
+        return "Car{" +
+                "models='" + models + '\'' +
+                ", series=" + series +
+                '}';
     }
 }
